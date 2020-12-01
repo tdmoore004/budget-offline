@@ -5,7 +5,7 @@ const FILES_TO_CACHE = [
     "/",
 	"/index.html",
 	"/styles.css",
-	// "/db.js",
+	"/db.js",
 	"/index.js",
 	"/manifest.webmanifest",
 	"/icons/icon-192x192.png",
@@ -73,5 +73,3 @@ self.addEventListener("activate", (event) => {
         })
       );
     });
-
-console.log("Hi from your service-worker.js file!");
