@@ -1,7 +1,7 @@
-const CACHE_NAME = "static-cache-v2";
-const DATA_CACHE_NAME = "data-cache-v1";
+const cacheName = "static-cache-v1";
+const dataCacheName = "data-cache-v1";
 
-const FILES_TO_CACHE = [
+const filesToCache = [
     "/",
 	"/index.html",
 	"/styles.css",
@@ -15,8 +15,8 @@ const FILES_TO_CACHE = [
 self.addEventListener("install", (event) => {
     event.waitUntil(
         caches
-            .open(CACHE_NAME).then((cache) => {
-                cache.addAll(FILES_TO_CACHE)
+            .open(cacheName).then((cache) => {
+                cache.addAll(filesToCache)
             }).catch((error) => {
                 console.log("Error caching files: ", error)
             })
@@ -29,7 +29,7 @@ self.addEventListener("activate", (event) => {
       caches.keys().then(keyList => {
             return Promise.all(
                 keyList.map(key => {
-                    if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
+                    if (key !== cacheName && key !== dataCacheName) {
                         console.log("Removing old cache data", key);
                         return caches.delete(key);
                     }
@@ -45,7 +45,7 @@ self.addEventListener("activate", (event) => {
   self.addEventListener('fetch', (event) => {
     if (event.request.url.includes("/api/")) {
         event.respondWith(
-          caches.open(DATA_CACHE_NAME).then(cache => {
+          caches.open(dataCacheName).then(cache => {
             return fetch(event.request)
               .then(response => {
                 // If the response was good, clone it and store it in the cache.
@@ -66,7 +66,7 @@ self.addEventListener("activate", (event) => {
       }
 
     event.respondWith(
-        caches.open(CACHE_NAME).then(cache => {
+        caches.open(cacheName).then(cache => {
           return cache.match(event.request).then(response => {
             return response || fetch(event.request);
           });
